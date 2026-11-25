@@ -1,0 +1,409 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Safran - Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5f1;color:#20352a;font-family:Arial,sans-serif}
+header{background:#173426;color:white;padding:20px 25px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.logo{font-size:25px;font-weight:bold;color:#d5b66d}
+header button{background:#c5a45c;color:#173426;border:0;padding:10px 18px;border-radius:7px;cursor:pointer}
+.container{max-width:1100px;margin:30px auto;padding:0 18px}
+h1{margin-bottom:25px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:25px}
+.stat,.panel{background:white;border-radius:12px;padding:20px;box-shadow:0 3px 12px #0000000c}
+.stat h3{margin:0 0 12px;color:#777;font-size:15px}
+.stat strong{font-size:28px;color:#b18d43}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.tabs button{border:0;padding:12px 20px;border-radius:8px;background:#dfe6df;color:#173426;cursor:pointer}
+.tabs button.active{background:#173426;color:white}
+.panel{display:none}
+.panel.active{display:block}
+.panel h2{margin-top:0}
+table{width:100%;border-collapse:collapse;margin-top:15px}
+th,td{padding:12px;border-bottom:1px solid #eee;text-align:right}
+th{background:#f5f5f1}
+.empty{text-align:center;color:#888;padding:25px}
+@media(max-width:600px){table{font-size:13px}th,td{padding:8px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">LE SAFRAN | ADMIN</div>
+<button onclick="logout()">تسجيل الخروج</button>
+</header>
+
+<div class="container">
+<h1>لوحة التحكم</h1>
+
+<div class="stats">
+<div class="stat"><h3>المنتجات</h3><strong id="productCount">0</strong></div>
+<div class="stat"><h3>الطلبات</h3><strong id="orderCount">0</strong></div>
+<div class="stat"><h3>الحجوزات</h3><strong id="bookingCount">0</strong></div>
+</div>
+
+<div class="tabs">
+<button class="active" onclick="showTab('products',this)">المنتجات</button>
+<button onclick="showTab('orders',this)">الطلبات</button>
+<button onclick="showTab('bookings',this)">الحجوزات</button>
+</div>
+
+
+<div class="panel active" id="products">
+<h2>إدارة المنتجات</h2>
+
+<button onclick="loadProducts()">تحديث المنتجات</button>
+<button onclick="addProduct()">إضافة منتج جديد</button>
+
+<div id="productMessage"></div>
+
+<table>
+<thead>
+<tr>
+<th>الاسم بالعربية</th>
+<th>الاسم بالفرنسية</th>
+<th>السعر</th>
+<th>التصنيف</th>
+<th>الحالة</th>
+<th>الإجراءات</th>
+</tr>
+</thead>
+<tbody id="productsTable">
+<tr><td colspan="6">جاري تحميل المنتجات...</td></tr>
+</tbody>
+</table>
+</div>
+
+
+
+<div class="panel" id="orders">
+  <h2>إدارة الطلبات</h2>
+
+  <button onclick="loadOrders()">تحديث الطلبات</button>
+
+  <div id="orderMessage"></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>رقم الطلب</th>
+        <th>اسم العميل</th>
+        <th>الهاتف</th>
+        <th>المجموع</th>
+        <th>التاريخ</th>
+        <th>الحالة</th>
+        <th>الإجراءات</th>
+      </tr>
+    </thead>
+    <tbody id="ordersTable">
+      <tr>
+        <td colspan="7">جاري تحميل الطلبات...</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="panel" id="bookings">
+  <h2>إدارة الحجوزات</h2>
+
+  <button onclick="loadBookings()">تحديث الحجوزات</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>رقم الحجز</th>
+        <th>اسم العميل</th>
+        <th>الهاتف</th>
+        <th>تاريخ الحجز</th>
+        <th>وقت الحجز</th>
+        <th>عدد الأشخاص</th>
+      </tr>
+    </thead>
+    <tbody id="bookingsTable">
+      <tr><td colspan="6">جاري تحميل الحجوزات...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function showTab(id, button) {
+  document.querySelectorAll(".panel").forEach(panel => panel.classList.remove("active"));
+  document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  button.classList.add("active");
+}
+
+async function logout() {
+  await fetch("/api/admin/logout", { method: "POST" });
+  window.location.href = "/admin/login.html";
+}
+
+async function loadProducts() {
+  const table = document.getElementById("productsTable");
+
+  try {
+    const response = await fetch("/api/admin/products");
+    if (!response.ok) throw new Error();
+
+    const products = await response.json();
+    document.getElementById("productCount").textContent = products.length;
+
+    table.innerHTML = products.length ? products.map(product => `
+      <tr>
+        <td>${escapeHTML(product.name_ar)}</td>
+        <td>${escapeHTML(product.name_fr)}</td>
+        <td>${product.price}</td>
+        <td>${escapeHTML(product.category)}</td>
+        <td>${product.available ? "متوفر" : "غير متوفر"}</td>
+        <td>
+          <button onclick="editProduct(${product.id})">تعديل</button>
+          <button onclick="deleteProduct(${product.id})">حذف</button>
+        </td>
+      </tr>
+    `).join("") : '<tr><td colspan="6">لا توجد منتجات</td></tr>';
+
+  } catch {
+    table.innerHTML = '<tr><td colspan="6">تعذر تحميل المنتجات</td></tr>';
+  }
+}
+
+async function addProduct() {
+  const name_ar = prompt("اسم المنتج بالعربية:");
+  if (!name_ar || !name_ar.trim()) return;
+
+  const name_fr = prompt("اسم المنتج بالفرنسية:");
+  if (!name_fr || !name_fr.trim()) return;
+
+  const description_ar = prompt("الوصف بالعربية:") || "";
+  const description_fr = prompt("الوصف بالفرنسية:") || "";
+  const price = prompt("السعر:");
+  if (price === null || price.trim() === "" || !Number.isFinite(Number(price)) || Number(price) < 0) {
+    alert("السعر غير صحيح");
+    return;
+  }
+
+  const category = prompt("التصنيف (starters / mains / desserts / drinks):") || "";
+  const image = prompt("رابط الصورة أو اسمها:") || "";
+
+  const response = await fetch("/api/admin/products", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name_ar, name_fr, description_ar, description_fr,
+      price: Number(price), category, image
+    })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    alert(data.message || "تعذرت إضافة المنتج");
+    return;
+  }
+
+  alert("تمت إضافة المنتج بنجاح");
+  loadProducts();
+}
+
+async function editProduct(id) {
+  const response = await fetch("/api/admin/products");
+  if (!response.ok) return alert("تعذر تحميل المنتجات");
+
+  const products = await response.json();
+  const product = products.find(item => item.id === id);
+  if (!product) return;
+
+  const name_ar = prompt("الاسم بالعربية:", product.name_ar);
+  if (name_ar === null || !name_ar.trim()) return;
+
+  const name_fr = prompt("الاسم بالفرنسية:", product.name_fr);
+  if (name_fr === null || !name_fr.trim()) return;
+
+  const price = prompt("السعر:", product.price);
+  if (price === null || price.trim() === "" || !Number.isFinite(Number(price)) || Number(price) < 0) {
+    alert("السعر غير صحيح");
+    return;
+  }
+
+  const description_ar = prompt("الوصف بالعربية:", product.description_ar);
+  if (description_ar === null) return;
+
+  const description_fr = prompt("الوصف بالفرنسية:", product.description_fr);
+  if (description_fr === null) return;
+
+  const category = prompt("التصنيف:", product.category);
+  if (category === null) return;
+
+  const image = prompt("الصورة:", product.image);
+  if (image === null) return;
+
+  const update = await fetch("/api/admin/products/" + id, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name_ar, name_fr, description_ar, description_fr,
+      price: Number(price), category, image,
+      available: product.available
+    })
+  });
+
+  const data = await update.json();
+
+  if (!update.ok) {
+    alert(data.message || "تعذر تعديل المنتج");
+    return;
+  }
+
+  alert("تم تحديث المنتج");
+  loadProducts();
+  loadBookings();
+  loadOrders();
+}
+
+async function deleteProduct(id) {
+  if (!confirm("هل أنت متأكد من حذف هذا المنتج؟")) return;
+
+  const response = await fetch("/api/admin/products/" + id, {
+    method: "DELETE"
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    alert(data.message || "تعذر حذف المنتج");
+    return;
+  }
+
+  alert("تم حذف المنتج");
+  loadProducts();
+}
+
+loadProducts(); 
+
+
+async function loadOrders() {
+  const table = document.getElementById("ordersTable");
+
+  try {
+    const response = await fetch("/api/admin/orders");
+
+    if (!response.ok) throw new Error();
+
+    const orders = await response.json();
+
+    document.getElementById("orderCount").textContent = orders.length;
+
+    table.innerHTML = orders.length
+      ? orders.map(order => `
+        <tr>
+          <td>${order.id}</td>
+          <td>${escapeHTML(order.customer_name)}</td>
+          <td>${escapeHTML(order.phone)}</td>
+          <td>${order.total}</td>
+          <td>${escapeHTML(order.created_at)}</td>
+          <td>${escapeHTML(order.status)}</td>
+<td>
+  <select onchange="updateOrderStatus(${order.id}, this.value)">
+    <option value="pending" ${order.status === "pending" ? "selected" : ""}>في الانتظار</option>
+    <option value="confirmed" ${order.status === "confirmed" ? "selected" : ""}>تم التأكيد</option>
+    <option value="preparing" ${order.status === "preparing" ? "selected" : ""}>قيد التحضير</option>
+    <option value="out_for_delivery" ${order.status === "out_for_delivery" ? "selected" : ""}>خرج للتوصيل</option>
+    <option value="delivered" ${order.status === "delivered" ? "selected" : ""}>تم التسليم</option>
+  </select>
+</td>
+</tr>
+      `).join("")
+      : '<tr><td colspan="7">لا توجد طلبات حالياً</td></tr>';
+
+  } catch {
+    table.innerHTML = '<tr><td colspan="7">تعذر تحميل الطلبات</td></tr>';
+  }
+}
+async function loadBookings() {
+  const table = document.getElementById("bookingsTable");
+
+  try {
+    const response = await fetch("/api/admin/bookings");
+
+    if (!response.ok) throw new Error();
+
+    const bookings = await response.json();
+
+    document.getElementById("bookingCount").textContent = bookings.length;
+
+    table.innerHTML = bookings.length
+      ? bookings.map(booking => `
+        <tr>
+          <td>${booking.id}</td>
+          <td>${escapeHTML(booking.customer_name)}</td>
+          <td>${escapeHTML(booking.phone)}</td>
+          <td>${escapeHTML(booking.booking_date)}</td>
+          <td>${escapeHTML(booking.booking_time)}</td>
+          <td>${booking.guests}</td>
+        </tr>
+      `).join("")
+      : '<tr><td colspan="6">لا توجد حجوزات حالياً</td></tr>';
+
+  } catch {
+    table.innerHTML = '<tr><td colspan="6">تعذر تحميل الحجوزات</td></tr>';
+  }
+}
+async function confirmOrder(id) {
+  if (!confirm("هل تريد تأكيد هذا الطلب؟")) return;
+
+  const response = await fetch("/api/admin/orders/" + id + "/confirm", {
+    method: "PUT"
+  });
+async function updateOrderStatus(id, status) {
+  const response = await fetch("/api/admin/orders/" + id + "/status", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ status })
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    alert(data.message || "تعذر تحديث حالة الطلب");
+    loadOrders();
+    return;
+  }
+
+  alert("تم تحديث حالة الطلب بنجاح");
+  loadOrders();
+}
+
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    alert(data.message || "تعذر تأكيد الطلب");
+    return;
+  }
+
+  alert("تم تأكيد الطلب بنجاح");
+  loadOrders();
+}
+
+
+</script>
+
+</body>
+</html>

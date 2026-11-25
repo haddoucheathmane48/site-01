@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Safran | الزعفران</title>
+<style>
+:root{
+  --bg:#0d2623; --bg2:#123430; --card:#16403a; --line:rgba(214,178,98,.28);
+  --gold:#d6b262; --gold2:#f0d894; --ivory:#f4eee0; --muted:#b9c7bf; --red:#c8553d;
+  --serif:"Playfair Display",Georgia,"Times New Roman","Amiri","Traditional Arabic",serif;
+  --sans:"Segoe UI",Tahoma,"Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(.22,.8,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ivory);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.wrap{width:min(1180px,92%);margin-inline:auto}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.2}
+
+/* header */
+header{position:fixed;inset:0 0 auto 0;z-index:50;transition:background .4s,box-shadow .4s,padding .4s;padding:18px 0}
+header.solid{background:rgba(13,38,35,.92);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line);padding:10px 0}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--serif);font-size:1.6rem;color:var(--gold);letter-spacing:.5px}
+nav{display:flex;gap:28px}
+nav a{position:relative;color:var(--ivory);opacity:.85;transition:opacity .3s}
+nav a::after{content:"";position:absolute;inset:auto 0 -4px 0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .4s var(--ease)}
+nav a:hover{opacity:1}nav a:hover::after{transform:scaleX(1)}
+.tools{display:flex;gap:10px;align-items:center}
+.pill{border:1px solid var(--line);border-radius:99px;padding:6px 16px;transition:all .3s;font-size:.9rem}
+.pill:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.cart-btn{position:relative;width:44px;height:44px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;transition:all .3s}
+.cart-btn:hover{background:var(--gold);color:var(--bg)}
+.cart-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7}
+.badge{position:absolute;top:-6px;inset-inline-end:-6px;min-width:20px;height:20px;border-radius:10px;background:var(--red);color:#fff;font-size:.72rem;display:grid;place-items:center;padding:0 5px}
+.badge.pop{animation:pop .4s var(--ease)}
+@keyframes pop{50%{transform:scale(1.5)}}
+
+/* hero */
+.hero{min-height:100vh;display:grid;align-items:center;padding:120px 0 70px;
+  background:radial-gradient(900px 500px at 80% 20%,rgba(214,178,98,.12),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2))}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+.hero h1{font-size:clamp(2.4rem,5.6vw,4.6rem);margin-bottom:20px}
+.hero h1 span{color:var(--gold)}
+.hero p{color:var(--muted);max-width:46ch;font-size:1.08rem;margin-bottom:34px}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 30px;border-radius:99px;background:var(--gold);color:#10231f;font-weight:600;transition:transform .3s var(--ease),box-shadow .3s,background .3s}
+.btn:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(214,178,98,.28);background:var(--gold2)}
+.btn.ghost{background:none;color:var(--ivory);border:1px solid var(--line)}
+.btn.ghost:hover{background:rgba(214,178,98,.12);box-shadow:none}
+.arch{position:relative;justify-self:center;width:min(420px,86%);aspect-ratio:3/4;border-radius:999px 999px 24px 24px;overflow:hidden;border:1px solid var(--gold);padding:10px;animation:rise 1.2s var(--ease) both}
+.arch::before{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 10px var(--bg)}
+.arch .ph{width:100%;height:100%;border-radius:990px 990px 14px 14px;overflow:hidden}
+@keyframes rise{from{opacity:0;transform:translateY(40px) scale(.96)}}
+.stamp{position:absolute;bottom:26px;inset-inline-start:-10px;background:var(--bg);border:1px solid var(--gold);border-radius:14px;padding:10px 16px;font-size:.88rem;color:var(--gold2);z-index:2}
+
+/* images with fallback */
+.ph{background:linear-gradient(135deg,#1d4a43,#0f2e2a);position:relative;overflow:hidden}
+.ph img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+.ph .fb{position:absolute;inset:0;display:grid;place-items:center;font-size:3.4rem;opacity:.6;z-index:0}
+.ph img{position:relative;z-index:1}
+
+/* menu */
+section{padding:96px 0}
+.head{text-align:center;margin-bottom:40px}
+.head h2{font-size:clamp(1.9rem,4vw,3rem);margin-bottom:8px}
+.head p{color:var(--muted)}
+.tabs{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:44px}
+.tab{padding:9px 22px;border-radius:99px;border:1px solid var(--line);color:var(--muted);transition:all .3s}
+.tab:hover{color:var(--ivory);border-color:var(--gold)}
+.tab.on{background:var(--gold);color:#10231f;border-color:var(--gold);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:26px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .5s var(--ease),border-color .4s,box-shadow .5s;animation:fadein .6s var(--ease) both}
+@keyframes fadein{from{opacity:0;transform:translateY(16px)}}
+.card:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 20px 40px rgba(0,0,0,.35)}
+.card:hover img{transform:scale(1.07)}
+.card .ph{aspect-ratio:4/3}
+.info{padding:18px 20px 22px;display:flex;flex-direction:column;gap:6px;flex:1}
+.info h3{font-size:1.2rem}
+.info p{color:var(--muted);font-size:.92rem;flex:1}
+.row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.price{color:var(--gold2);font-family:var(--serif);font-size:1.25rem}
+.add{width:42px;height:42px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);font-size:1.4rem;line-height:1;transition:all .3s var(--ease)}
+.add:hover{background:var(--gold);color:var(--bg);transform:rotate(90deg) scale(1.08)}
+.add.ok{background:#3f9a6b;border-color:#3f9a6b;color:#fff}
+
+/* about + contact */
+.about{background:var(--bg2)}
+.about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.about .ph{border-radius:20px;aspect-ratio:5/4;border:1px solid var(--line)}
+.about h2{font-size:clamp(1.8rem,3.6vw,2.7rem);margin-bottom:16px}
+.about p{color:var(--muted);margin-bottom:14px}
+.facts{display:flex;gap:30px;margin-top:22px;flex-wrap:wrap}
+.facts b{display:block;font-family:var(--serif);font-size:1.7rem;color:var(--gold)}
+.facts small{color:var(--muted)}
+.res{max-width:620px;margin-inline:auto;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.res input,.res select{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ivory);font:inherit}
+.res input:focus,.res select:focus{outline:none;border-color:var(--gold)}
+.res .btn{grid-column:1/-1;justify-content:center}
+footer{padding:36px 0;border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:.9rem}
+
+/* cart drawer */
+.veil{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .4s;z-index:90}
+.veil.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;bottom:0;inset-inline-end:0;width:min(420px,100%);background:var(--bg2);border-inline-start:1px solid var(--gold);z-index:100;display:flex;flex-direction:column;transform:translateX(105%);transition:transform .5s var(--ease)}
+[dir=rtl] .drawer{transform:translateX(-105%)}
+.drawer.on{transform:none!important}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--line)}
+.dh h3{font-size:1.4rem}
+.x{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);transition:all .3s}
+.x:hover{background:var(--red);border-color:var(--red);transform:rotate(90deg)}
+.items{flex:1;overflow:auto;padding:14px 24px}
+.empty{text-align:center;color:var(--muted);margin-top:70px}
+.it{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line);animation:fadein .4s var(--ease)}
+.it .ph{width:68px;height:68px;border-radius:12px;flex:none}
+.it .ph .fb{font-size:1.6rem}
+.it div.t{flex:1;min-width:0}
+.it h4{font-family:var(--serif);font-size:1rem}
+.it small{color:var(--gold2)}
+.qty{display:flex;align-items:center;gap:8px;margin-top:4px}
+.qty button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);transition:all .25s}
+.qty button:hover{background:var(--gold);color:var(--bg)}
+.del{color:var(--muted);font-size:1.2rem;transition:color .3s}.del:hover{color:var(--red)}
+.df{padding:20px 24px;border-top:1px solid var(--line)}
+.tot{display:flex;justify-content:space-between;font-size:1.2rem;margin-bottom:14px}
+.tot b{color:var(--gold2);font-family:var(--serif)}
+.df .btn{width:100%;justify-content:center}
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,30px);background:var(--gold);color:#10231f;padding:12px 24px;border-radius:99px;font-weight:600;opacity:0;pointer-events:none;transition:all .45s var(--ease);z-index:200;max-width:90%;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* auth page */
+.auth{position:fixed;inset:0;z-index:150;background:var(--bg);display:grid;grid-template-columns:1fr 1fr;overflow:auto;opacity:0;visibility:hidden;transform:scale(1.02);transition:opacity .5s var(--ease),transform .6s var(--ease),visibility 0s .5s}
+.auth.on{opacity:1;visibility:visible;transform:none;transition-delay:0s}
+.aside{position:relative;display:flex;flex-direction:column;justify-content:flex-end;padding:56px;overflow:hidden;min-height:100vh}
+.aside .ph{position:absolute;inset:0}
+.aside .ph::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(13,38,35,.15),rgba(13,38,35,.92))}
+.aside blockquote{position:relative;z-index:3;font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.4rem);line-height:1.35;max-width:16ch}
+.aside small{position:relative;z-index:3;color:var(--gold2);margin-top:14px;font-size:1rem}
+.apanel{position:relative;display:flex;flex-direction:column;justify-content:center;padding:70px clamp(24px,6vw,90px)}
+.apanel h2{font-size:clamp(1.7rem,3vw,2.3rem);margin-bottom:6px}
+.apanel>p{color:var(--muted);margin-bottom:26px;max-width:40ch}
+.back{position:absolute;top:22px;inset-inline-end:22px}
+.atabs{position:relative;display:flex;max-width:430px;border-bottom:1px solid var(--line);margin-bottom:26px}
+.atab{flex:1;padding:12px;color:var(--muted);transition:color .3s}
+.atab:hover,.atab.on{color:var(--gold2)}
+.atabs i{position:absolute;bottom:-1px;inset-inline-start:0;width:50%;height:2px;background:var(--gold);transition:transform .45s var(--ease)}
+.atabs.s i{transform:translateX(100%)}
+[dir=rtl] .atabs.s i{transform:translateX(-100%)}
+.form{display:none;flex-direction:column;gap:15px;max-width:430px;width:100%}
+.form.on{display:flex;animation:fadein .5s var(--ease)}
+.fld{display:flex;flex-direction:column;gap:6px}
+.fld label{font-size:.88rem;color:var(--muted)}
+.fld input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ivory);font:inherit;transition:border-color .3s,box-shadow .3s}
+.fld input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(214,178,98,.15)}
+.fld.bad input{border-color:var(--red);box-shadow:0 0 0 3px rgba(200,85,61,.18)}
+.pw{position:relative}
+.pw input{padding-inline-end:56px}
+.eye{position:absolute;top:50%;inset-inline-end:14px;transform:translateY(-50%);opacity:.6;transition:opacity .3s}
+.eye:hover{opacity:1}
+.meter{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.meter b{display:block;height:100%;width:0;background:var(--red);transition:width .4s var(--ease),background .4s}
+.chk{display:flex;gap:10px;align-items:flex-start;font-size:.9rem;color:var(--muted);cursor:pointer}
+.chk input{margin-top:6px;accent-color:var(--gold)}
+.err{color:#ff9d88;font-size:.88rem;min-height:1.3em}
+.form .btn{justify-content:center}
+.lnk{color:var(--gold2);font-size:.9rem;text-align:center}
+.lnk:hover{text-decoration:underline}
+.note{color:var(--muted);font-size:.8rem;margin-top:24px;max-width:430px}
+
+/* luxury layer */
+:root{--bg:#0a1f1c;--bg2:#0f2b27;--card:#133a35;--line:rgba(214,178,98,.3);
+ --goldg:linear-gradient(110deg,#a8812f 0%,#e9cf86 30%,#c9a24d 55%,#f3e2a8 75%,#a8812f 100%);
+ --pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cg fill='none' stroke='%23d6b262' stroke-opacity='.08'%3E%3Crect x='22' y='22' width='36' height='36'/%3E%3Crect x='22' y='22' width='36' height='36' transform='rotate(45 40 40)'/%3E%3C/g%3E%3C/svg%3E")}
+::selection{background:var(--gold);color:#10231f}
+html{scrollbar-color:var(--gold) var(--bg)}
+body{background:var(--bg) var(--pat)}
+header.solid{background:rgba(10,31,28,.92)}
+.logo{background:var(--goldg);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.8rem;font-weight:700}
+[dir=ltr] .logo{letter-spacing:.14em;font-size:1.5rem}
+[dir=ltr] nav a,[dir=ltr] .tab,[dir=ltr] .btn,[dir=ltr] .pill{letter-spacing:.05em}
+.hero{background:var(--pat),radial-gradient(900px 520px at 78% 18%,rgba(214,178,98,.16),transparent 60%),linear-gradient(180deg,var(--bg),var(--bg2))}
+.hero h1{font-weight:700}
+.hero h1 span:first-child{background:var(--goldg);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .wrap>div:first-child>*{animation:up .9s var(--ease) both}
+.hero .wrap>div:first-child>:nth-child(2){animation-delay:.25s}
+.hero .wrap>div:first-child>:nth-child(3){animation-delay:.45s}
+@keyframes up{from{opacity:0;transform:translateY(26px)}}
+.arch{outline:1px solid rgba(214,178,98,.42);outline-offset:14px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.arch img{animation:kb 20s ease-in-out infinite alternate}
+@keyframes kb{to{transform:scale(1.09)}}
+.stamp{inset-inline-start:22px;bottom:34px;background:rgba(10,31,28,.9);backdrop-filter:blur(6px)}
+.btn:not(.ghost){background:var(--goldg);background-size:220% 100%;background-position:0 0;box-shadow:0 6px 20px rgba(214,178,98,.18);transition:transform .3s var(--ease),box-shadow .3s,background-position .7s var(--ease)}
+.btn:not(.ghost):hover{background:var(--goldg);background-size:220% 100%;background-position:100% 0;box-shadow:0 14px 34px rgba(214,178,98,.34)}
+.head h2::before{content:"◆";display:block;color:var(--gold);font-size:.55rem;margin-bottom:14px}
+.head h2::after{content:"";display:block;width:150px;height:1px;margin:18px auto 0;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.tab.on{background:var(--goldg)}
+.card{position:relative;background:linear-gradient(180deg,#15433d,#0f322d)}
+.card::after{content:"";position:absolute;inset:8px;border:1px solid rgba(214,178,98,.22);border-radius:9px;pointer-events:none;z-index:3;transition:border-color .5s,inset .5s var(--ease)}
+.card:hover::after{border-color:rgba(240,216,148,.7);inset:6px}
+.card .ph::after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,transparent 50%,rgba(10,31,28,.7))}
+.info{padding:20px 24px 26px}
+.info h3{font-size:1.3rem}
+.price{background:var(--goldg);-webkit-background-clip:text;background-clip:text;color:transparent;font-size:1.35rem;font-weight:700}
+.add{background:rgba(214,178,98,.08)}
+.about{background:var(--pat),var(--bg2)}
+.about .ph{box-shadow:0 24px 60px rgba(0,0,0,.4);outline:1px solid rgba(214,178,98,.35);outline-offset:12px}
+.facts b{background:var(--goldg);-webkit-background-clip:text;background-clip:text;color:transparent}
+footer{background:#071713;padding:48px 0}
+footer .logo{margin-bottom:6px}
+
+@media(max-width:860px){
+  nav{display:none}
+  .auth{grid-template-columns:1fr}.aside{display:none}
+  .hero .wrap,.about .wrap{grid-template-columns:1fr;gap:40px;text-align:center}
+  .hero p{margin-inline:auto}.cta,.facts{justify-content:center}
+  .arch{order:-1;width:min(300px,80%)}
+  section{padding:70px 0}
+}
+@media(max-width:520px){.res{grid-template-columns:1fr}.logo{font-size:1.3rem}.pill{padding:5px 11px;font-size:.8rem}.tools{gap:6px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header id="hd"><div class="wrap bar">
+  <a href="#top" class="logo">Le Safran</a>
+  <nav>
+    <a href="#menu" data-i="nav_menu"></a>
+    <a href="#about" data-i="nav_about"></a>
+    <a href="#book" data-i="nav_book"></a>
+  </nav>
+  <div class="tools">
+    <button class="pill" id="lang" aria-label="Language">Français</button>
+    <button class="pill" id="authBtn"></button>
+    <button class="pill" id="outBtn" data-i="logout" hidden></button>
+    <button class="cart-btn" id="openCart" aria-label="Cart">
+      <svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
+      <span class="badge" id="count">0</span>
+    </button>
+  </div>
+</div></header>
+
+<main id="top">
+<div class="hero"><div class="wrap">
+  <div>
+    <h1><span data-i="h1a"></span> <span style="color:var(--ivory)" data-i="h1b"></span></h1>
+    <p data-i="hero_p"></p>
+    <div class="cta">
+      <a href="#menu" class="btn" data-i="cta1"></a>
+      <a href="#book" class="btn ghost" data-i="cta2"></a>
+    </div>
+  </div>
+  <div class="arch">
+    <div class="ph"><span class="fb">🍽️</span><img alt="" src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=80" onerror="this.remove()"></div>
+    <div class="stamp" data-i="stamp"></div>
+  </div>
+</div></div>
+
+<section id="menu"><div class="wrap">
+  <div class="head"><h2 data-i="menu_t"></h2><p data-i="menu_s"></p></div>
+  <div class="tabs" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</div></section>
+
+<section id="about" class="about"><div class="wrap">
+  <div class="ph"><span class="fb">👨‍🍳</span><img alt="" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" onerror="this.remove()"></div>
+  <div>
+    <h2 data-i="about_t"></h2>
+    <p data-i="about_p1"></p><p data-i="about_p2"></p>
+    <div class="facts">
+      <div><b>12</b><small data-i="f1"></small></div>
+      <div><b>40+</b><small data-i="f2"></small></div>
+      <div><b>4.9</b><small data-i="f3"></small></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="book"><div class="wrap">
+  <div class="head"><h2 data-i="book_t"></h2><p data-i="book_s"></p></div>
+  <form class="res" id="resForm">
+    <input required data-ph="ph_name" type="text">
+    <input required data-ph="ph_phone" type="tel" id="rphone" placeholder="05XXXXXXXX" pattern="(0[567])[0-9]{8}|(\+213|00213)[567][0-9]{8}" title="Entrez un numéro algérien valide">
+    <input required type="date" id="rdate">
+    <select id="rpeople"></select>
+    <button class="btn" type="submit" data-i="book_btn"></button>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap"><div class="logo">Le Safran</div><span data-i="foot"></span></div></footer>
+
+<div class="auth" id="auth" role="dialog" aria-modal="true">
+  <div class="aside">
+    <div class="ph"><span class="fb">🍽️</span><img alt="" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1000&q=80" onerror="this.remove()"></div>
+    <blockquote data-i="a_quote"></blockquote>
+    <small>Le Safran</small>
+  </div>
+  <div class="apanel">
+    <button class="x back" id="authClose" aria-label="Close">✕</button>
+    <h2 data-i="a_title"></h2>
+    <p data-i="a_sub"></p>
+    <div class="atabs" id="atabs">
+      <button class="atab on" data-t="login" data-i="t_login"></button>
+      <button class="atab" data-t="signup" data-i="t_signup"></button>
+      <i></i>
+    </div>
+
+    <form class="form on" id="fLogin" novalidate>
+      <div class="fld"><label for="lEmail" data-i="l_email"></label><input type="email" id="lEmail" autocomplete="email" dir="auto"></div>
+      <div class="fld"><label for="lPass" data-i="l_pass"></label>
+        <div class="pw"><input type="password" id="lPass" autocomplete="current-password"><button type="button" class="eye" aria-label="show">👁</button></div></div>
+      <p class="err" id="lErr" role="alert"></p>
+      <button class="btn" type="submit" data-i="t_login"></button>
+      <a href="#" class="lnk" id="forgot" data-i="forgot"></a>
+    </form>
+
+    <form class="form" id="fSignup" novalidate>
+      <div class="fld"><label for="sName" data-i="s_name"></label><input type="text" id="sName" autocomplete="name"></div>
+      <div class="fld"><label for="sEmail" data-i="l_email"></label><input type="email" id="sEmail" autocomplete="email" dir="auto"></div>
+      <div class="fld"><label for="sPhone" data-i="s_phone"></label><input type="tel" id="sPhone" autocomplete="tel" dir="auto"></div>
+      <div class="fld"><label for="sPass" data-i="l_pass"></label>
+        <div class="pw"><input type="password" id="sPass" autocomplete="new-password"><button type="button" class="eye" aria-label="show">👁</button></div>
+        <div class="meter" id="meter"><b></b></div></div>
+      <div class="fld"><label for="sConf" data-i="s_conf"></label><input type="password" id="sConf" autocomplete="new-password"></div>
+      <label class="chk"><input type="checkbox" id="sTerms"><span data-i="s_terms"></span></label>
+      <p class="err" id="sErr" role="alert"></p>
+      <button class="btn" type="submit" data-i="s_btn"></button>
+    </form>
+    <p class="note" data-i="note"></p>
+  </div>
+</div>
+<div class="veil" id="veil"></div>
+<aside class="drawer" id="drawer" aria-label="Cart">
+  <div class="dh"><h3 data-i="cart_t"></h3><button class="x" id="closeCart" aria-label="Close">✕</button></div>
+  <div class="items" id="items"></div>
+  <div class="df">
+    <div class="tot"><span data-i="total"></span><b id="total"></b></div>
+    <button class="btn" id="checkout" data-i="checkout"></button>
+  </div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+const T={
+ar:{dir:"rtl",lang:"Français",cur:"د.ج",
+ nav_menu:"القائمة",nav_about:"عنّا",nav_book:"احجز طاولة",
+ h1a:"نكهات الأصالة",h1b:"بلمسة فاخرة",
+ hero_p:"مطبخ جزائري متوسطي يُحضَّر يومياً من مكوّنات طازجة، في أجواء راقية تليق بمناسباتك.",
+ cta1:"اكتشف القائمة",cta2:"احجز طاولة",stamp:"مفتوح يومياً 12:00 – 23:30",
+ menu_t:"قائمتنا",menu_s:"أطباق نختارها بعناية، من الافتتاحية حتى الحلوى",
+ cats:{all:"الكل",starters:"المقبّلات",mains:"الأطباق الرئيسية",desserts:"الحلويات والمشروبات"},
+ about_t:"حكاية الزعفران",
+ about_p1:"بدأت قصتنا من مطبخ عائلي صغير، حيث كان الزعفران يعطي كل طبق لونه ورائحته.",
+ about_p2:"اليوم نقدّم تلك الوصفات بروح عصرية، ومكوّنات محلية نشتريها كل صباح.",
+ f1:"سنة من الخبرة",f2:"طبقاً مميزاً",f3:"تقييم الزبائن",
+ book_t:"احجز طاولتك",book_s:"أدخل بياناتك وسنؤكد الحجز عبر الهاتف",
+ ph_name:"الاسم الكامل",ph_phone:"رقم الهاتف",ppl:n=>n+(n==1?" شخص":" أشخاص"),
+ book_btn:"تأكيد الحجز",booked:"تم استلام طلب الحجز، سنتصل بك قريباً",
+ cart_t:"سلتي",total:"المجموع",checkout:"إتمام الطلب",empty:"سلتك فارغة. أضف طبقاً من القائمة.",
+ added:n=>"أُضيف: "+n,done:"تم إرسال الطلب (نسخة تجريبية)",
+ foot:"© 2026 Le Safran — جميع الحقوق محفوظة",
+ t_login:"تسجيل الدخول",t_signup:"إنشاء حساب",logout:"خروج",
+ a_title:"أهلاً بك في الزعفران",a_sub:"سجّل الدخول لإتمام طلباتك ومتابعة حجوزاتك",a_quote:"مائدة تُروى عليها الحكايات",
+ l_email:"البريد الإلكتروني",l_pass:"كلمة المرور",forgot:"نسيت كلمة المرور؟",
+ s_name:"الاسم الكامل",s_phone:"رقم الهاتف",s_conf:"تأكيد كلمة المرور",s_terms:"أوافق على شروط الاستخدام وسياسة الخصوصية",s_btn:"إنشاء الحساب",
+ note:"نسخة تجريبية: الحسابات تُحفظ في متصفحك فقط ولا تُرسل إلى أي خادم.",
+ e_empty:"املأ البريد وكلمة المرور",e_name:"أدخل اسمك الكامل (حرفان على الأقل)",e_email:"صيغة البريد الإلكتروني غير صحيحة",
+ e_phone:"رقم الهاتف غير صحيح (أرقام فقط، 8 إلى 15 رقماً)",e_pass:"كلمة المرور: 8 أحرف على الأقل مع حرف ورقم",e_match:"كلمتا المرور غير متطابقتين",
+ e_terms:"يجب الموافقة على الشروط للمتابعة",e_taken:"هذا البريد مسجّل مسبقاً، جرّب تسجيل الدخول",e_bad:"البريد أو كلمة المرور غير صحيحة",
+ welcome:n=>"مرحباً "+n,bye:"تم تسجيل الخروج",need_login:"سجّل الدخول لإتمام الطلب",
+ forgot_msg:"استعادة كلمة المرور غير متوفرة في النسخة التجريبية",in_as:e=>"مسجّل باسم "+e},
+fr:{dir:"ltr",lang:"العربية",cur:"DA",
+ nav_menu:"Menu",nav_about:"Notre histoire",nav_book:"Réserver",
+ h1a:"Les saveurs d'origine,",h1b:"sublimées",
+ hero_p:"Une cuisine algérienne et méditerranéenne préparée chaque jour avec des produits frais, dans un cadre raffiné.",
+ cta1:"Voir le menu",cta2:"Réserver une table",stamp:"Ouvert tous les jours 12h00 – 23h30",
+ menu_t:"Notre carte",menu_s:"Des plats choisis avec soin, de l'entrée au dessert",
+ cats:{all:"Tout",starters:"Entrées",mains:"Plats",desserts:"Desserts & boissons"},
+ about_t:"L'histoire du Safran",
+ about_p1:"Tout a commencé dans une petite cuisine familiale où le safran donnait à chaque plat sa couleur et son parfum.",
+ about_p2:"Aujourd'hui, nous servons ces recettes avec un esprit moderne et des produits locaux achetés chaque matin.",
+ f1:"ans d'expérience",f2:"plats signatures",f3:"note clients",
+ book_t:"Réservez votre table",book_s:"Laissez vos coordonnées, nous confirmons par téléphone",
+ ph_name:"Nom complet",ph_phone:"Téléphone",ppl:n=>n+(n==1?" personne":" personnes"),
+ book_btn:"Confirmer la réservation",booked:"Demande reçue, nous vous appelons bientôt",
+ cart_t:"Mon panier",total:"Total",checkout:"Valider la commande",empty:"Votre panier est vide. Ajoutez un plat du menu.",
+ added:n=>n+" ajouté",done:"Commande envoyée (version démo)",
+ foot:"© 2026 Le Safran — Tous droits réservés",
+ t_login:"Connexion",t_signup:"Créer un compte",logout:"Quitter",
+ a_title:"Bienvenue au Safran",a_sub:"Connectez-vous pour valider vos commandes et suivre vos réservations",a_quote:"Une table où se racontent les histoires",
+ l_email:"E-mail",l_pass:"Mot de passe",forgot:"Mot de passe oublié ?",
+ s_name:"Nom complet",s_phone:"Téléphone",s_conf:"Confirmer le mot de passe",s_terms:"J'accepte les conditions d'utilisation et la politique de confidentialité",s_btn:"Créer mon compte",
+ note:"Version démo : les comptes sont enregistrés uniquement dans votre navigateur et ne sont envoyés à aucun serveur.",
+ e_empty:"Saisissez votre e-mail et votre mot de passe",e_name:"Saisissez votre nom complet (2 caractères minimum)",e_email:"Adresse e-mail invalide",
+ e_phone:"Numéro invalide (chiffres uniquement, 8 à 15)",e_pass:"Mot de passe : 8 caractères minimum, avec une lettre et un chiffre",e_match:"Les mots de passe ne correspondent pas",
+ e_terms:"Vous devez accepter les conditions pour continuer",e_taken:"Cet e-mail est déjà inscrit, essayez de vous connecter",e_bad:"E-mail ou mot de passe incorrect",
+ welcome:n=>"Bienvenue "+n,bye:"Vous êtes déconnecté",need_login:"Connectez-vous pour valider la commande",
+ forgot_msg:"La récupération du mot de passe n'est pas disponible en démo",in_as:e=>"Connecté : "+e}
+};
+const U="https://images.unsplash.com/";
+let MENU=[];
+let lang="ar",cat="all",cart={};
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const fmt=n=>n.toLocaleString(lang==="ar"?"ar-DZ-u-nu-latn":"fr-FR")+" "+T[lang].cur;
+const photo=(m,w)=>`<div class="ph"><span class="fb">${m.e}</span><img loading="lazy" alt="${m[lang][0]}" src="${m.src||U+m.img+"?w="+w+"&q=75"}" onerror="this.remove()"></div>`;
+async function loadProducts(){
+  const grid = document.getElementById("grid");
+
+  try {
+    const response = await fetch("/api/products");
+
+    if (!response.ok) {
+      throw new Error("تعذر تحميل المنتجات");
+    }
+
+    const products = await response.json();
+
+    MENU = products.map(product => {
+      const categoryIcons = {
+        starters: "🥗",
+        mains: "🍲",
+        desserts: "🍰",
+        drinks: "🍵"
+      };
+
+      const image = product.image || "";
+      const isUrl = image.startsWith("http") || image.startsWith("data:");
+
+      return {
+        id: product.id,
+        c: product.category,
+        p: Number(product.price),
+        e: categoryIcons[product.category] || "🍽️",
+        img: isUrl ? "" : image,
+        src: isUrl ? image : "",
+        ar: [product.name_ar || "", product.description_ar || ""],
+        fr: [product.name_fr || "", product.description_fr || ""]
+      };
+    });
+
+    renderMenu();
+    renderCart();
+  } catch (error) {
+    grid.innerHTML = "<p>تعذر تحميل المنتجات. تحقق من اتصال الخادم.</p>";
+    console.error(error);
+  }
+}
+function setLang(l){
+  lang=l;const t=T[l];
+  document.documentElement.lang=l;document.documentElement.dir=t.dir;
+  $("#lang").textContent=t.lang;
+  $$("[data-i]").forEach(e=>e.textContent=t[e.dataset.i]);
+  $$("[data-ph]").forEach(e=>e.placeholder=t[e.dataset.ph]);
+  $("#rpeople").innerHTML=[1,2,3,4,5,6,8,10].map(n=>`<option>${t.ppl(n)}</option>`).join("");
+  renderTabs();renderMenu();renderCart();renderAuthUI();
+}
+document.getElementById("resForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const inputs = this.querySelectorAll("input");
+  const name = inputs[0].value.trim();
+  const phone = inputs[1].value.trim();
+  const date = document.getElementById("rdate").value;
+  const peopleText = document.getElementById("rpeople").selectedOptions[0].text;
+  const guests = Number(peopleText.match(/\d+/)[0]);
+
+  try {
+    const response = await fetch("/api/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        customer_name: name,
+        phone: phone,
+        booking_date: date,
+        guests: guests
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message);
+    }
+
+    alert(T[lang].booked);
+    this.reset();
+  } catch (error) {
+    alert(error.message || "حدث خطأ أثناء إرسال الحجز");
+  }
+});
+function renderTabs(){
+  $("#tabs").innerHTML=Object.entries(T[lang].cats).map(([k,v])=>`<button class="tab ${k===cat?"on":""}" data-c="${k}">${v}</button>`).join("");
+  $$(".tab").forEach(b=>b.onclick=()=>{cat=b.dataset.c;renderTabs();renderMenu()});
+}
+function renderMenu(){
+  $("#grid").innerHTML=MENU.filter(m=>cat==="all"||m.c===cat).map((m,i)=>`
+   <article class="card" style="animation-delay:${i*70}ms">${photo(m,600)}
+    <div class="info"><h3>${m[lang][0]}</h3><p>${m[lang][1]}</p>
+     <div class="row"><span class="price">${fmt(m.p)}</span>
+     <button class="add" data-id="${m.id}" aria-label="+">+</button></div></div></article>`).join("");
+  $$(".add").forEach(b=>b.onclick=()=>{add(+b.dataset.id);b.classList.add("ok");b.textContent="✓";setTimeout(()=>{b.classList.remove("ok");b.textContent="+"},900)});
+}
+function add(id){cart[id]=(cart[id]||0)+1;renderCart();const b=$("#count");b.classList.remove("pop");void b.offsetWidth;b.classList.add("pop");toast(T[lang].added(MENU.find(m=>m.id===id)[lang][0]))}
+function renderCart(){
+  const ids=Object.keys(cart);let total=0,n=0;
+  $("#items").innerHTML=ids.length?ids.map(id=>{const m=MENU.find(x=>x.id==id),q=cart[id];total+=m.p*q;n+=q;
+   return `<div class="it">${photo(m,150)}<div class="t"><h4>${m[lang][0]}</h4><small>${fmt(m.p*q)}</small>
+   <div class="qty"><button data-a="-" data-id="${id}">−</button><span>${q}</span><button data-a="+" data-id="${id}">+</button></div></div>
+   <button class="del" data-a="x" data-id="${id}" aria-label="x">🗑</button></div>`}).join(""):`<p class="empty">${T[lang].empty}</p>`;
+  $("#total").textContent=fmt(total);$("#count").textContent=n;
+  $$("#items [data-a]").forEach(b=>b.onclick=()=>{const id=b.dataset.id,a=b.dataset.a;
+    if(a==="+")cart[id]++;else if(a==="-"){if(--cart[id]<=0)delete cart[id]}else delete cart[id];renderCart()});
+}
+let tt;function toast(s){const e=$("#toast");e.textContent=s;e.classList.add("on");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("on"),1800)}
+const cartOpen=o=>{$("#drawer").classList.toggle("on",o);$("#veil").classList.toggle("on",o)};
+
+$("#lang").onclick=()=>setLang(lang==="ar"?"fr":"ar");
+$("#openCart").onclick=()=>cartOpen(true);
+$("#closeCart").onclick=$("#veil").onclick=()=>cartOpen(false);
+document.onkeydown=e=>{if(e.key==="Escape"){cartOpen(false);if($("#auth").classList.contains("on"))closeAuth()}};
+
+$("#checkout").onclick = async () => {
+  if (!Object.keys(cart).length) return toast(T[lang].empty);
+
+  if (!me()) {
+    wantCheckout = true;
+    cartOpen(false);
+    toast(T[lang].need_login);
+    return openAuth("login");
+  }
+
+  const user = me();
+  const address = prompt("أدخل عنوان التوصيل:");
+
+  if (!address || !address.trim()) {
+    return toast("يرجى إدخال عنوان التوصيل");
+  }
+
+  const items = Object.entries(cart).map(([id, quantity]) => ({
+    id: Number(id),
+    quantity: Number(quantity)
+  }));
+
+  try {
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        customer_name: user.name,
+        phone: user.phone,
+        address: address.trim(),
+        items
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return toast(data.message || "تعذر إرسال الطلب");
+    }
+
+    cart = {};
+    renderCart();
+    cartOpen(false);
+    toast("تم إرسال طلبك بنجاح");
+  } catch (error) {
+    toast("تعذر الاتصال بالسيرفر");
+  }
+};
+
+$("#rdate").min=new Date().toISOString().slice(0,10);
+addEventListener("scroll",()=>$("#hd").classList.toggle("solid",scrollY>40),{passive:true});
+/* ===== auth (demo: client-side only) ===== */
+let users=[],sess=null,wantCheckout=false;
+try{users=JSON.parse(localStorage.getItem("ls_users")||"[]");sess=localStorage.getItem("ls_sess")}catch(e){}
+const save=()=>{try{localStorage.setItem("ls_users",JSON.stringify(users));sess?localStorage.setItem("ls_sess",sess):localStorage.removeItem("ls_sess")}catch(e){}};
+const me=()=>users.find(u=>u.email===sess);
+async function sha(s){
+  if(!(window.crypto&&crypto.subtle))return btoa(unescape(encodeURIComponent("safran:"+s)));
+  const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode("safran:"+s));
+  return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function renderAuthUI(){const u=me();$("#authBtn").textContent=u?"👤 "+u.name.split(" ")[0]:T[lang].t_login;$("#outBtn").hidden=!u}
+function clearErr(){$$(".fld.bad").forEach(f=>f.classList.remove("bad"));$$(".err").forEach(e=>e.textContent="")}
+function showTab(t){
+  $$(".atab").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
+  $("#atabs").classList.toggle("s",t==="signup");
+  $("#fLogin").classList.toggle("on",t==="login");
+  $("#fSignup").classList.toggle("on",t==="signup");
+  clearErr();
+}
+function route(){
+  const h=location.hash.slice(1),on=h==="login"||h==="signup";
+  if(on)showTab(h);
+  $("#auth").classList.toggle("on",on);
+  document.body.style.overflow=on?"hidden":"";
+}
+const openAuth=t=>{location.hash=t};
+function closeAuth(){wantCheckout=false;history.replaceState(null,"",location.pathname+location.search);route()}
+function fail(input,msgEl,text){clearErr();if(input){input.closest(".fld").classList.add("bad");input.focus()}msgEl.textContent=text}
+function done(u,form){
+  const w=wantCheckout;sess=u.email;save();form.reset();closeAuth();renderAuthUI();
+  toast(T[lang].welcome(u.name.split(" ")[0]));
+  if(w)setTimeout(()=>cartOpen(true),600);
+}
+
+$("#fLogin").onsubmit=async e=>{
+  e.preventDefault();
+  const t=T[lang],em=$("#lEmail"),pw=$("#lPass"),msg=$("#lErr"),email=em.value.trim().toLowerCase();
+  if(!email||!pw.value)return fail(email?pw:em,msg,t.e_empty);
+  const u=users.find(x=>x.email===email);
+  if(!u||u.h!==await sha(pw.value))return fail(pw,msg,t.e_bad);
+  done(u,e.target);
+};
+$("#fSignup").onsubmit=async e=>{
+  e.preventDefault();
+  const t=T[lang],g=id=>$("#"+id),msg=g("sErr");
+  const name=g("sName").value.trim(),email=g("sEmail").value.trim().toLowerCase(),
+        phone=g("sPhone").value.replace(/[\s-]/g,""),p=g("sPass").value;
+  if(name.length<2)return fail(g("sName"),msg,t.e_name);
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email))return fail(g("sEmail"),msg,t.e_email);
+  if(!/^\+?\d{8,15}$/.test(phone))return fail(g("sPhone"),msg,t.e_phone);
+  if(p.length<8||!/[a-zA-Z\u0600-\u06FF]/.test(p)||!/\d/.test(p))return fail(g("sPass"),msg,t.e_pass);
+  if(p!==g("sConf").value)return fail(g("sConf"),msg,t.e_match);
+  if(!g("sTerms").checked)return fail(null,msg,t.e_terms);
+  if(users.some(u=>u.email===email))return fail(g("sEmail"),msg,t.e_taken);
+  const u={name,email,phone,h:await sha(p)};
+  users.push(u);done(u,e.target);$("#meter b").style.width="0";
+};
+$("#sPass").oninput=e=>{
+  const p=e.target.value;let s=0;
+  if(p.length>=8)s++;if(/[a-z]/.test(p)&&/[A-Z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^\w\s]/.test(p)||p.length>=12)s++;
+  const m=$("#meter b");m.style.width=s*25+"%";m.style.background=["var(--red)","var(--red)","#d9a13b","#8fc06a","#3f9a6b"][s];
+};
+$$(".eye").forEach(b=>b.onclick=()=>{const i=b.previousElementSibling;i.type=i.type==="password"?"text":"password"});
+$$(".form").forEach(f=>f.addEventListener("input",clearErr));
+$$(".atab").forEach(b=>b.onclick=()=>{location.hash=b.dataset.t});
+$("#authBtn").onclick=()=>me()?toast(T[lang].in_as(me().email)):openAuth("login");
+$("#outBtn").onclick=()=>{sess=null;save();renderAuthUI();toast(T[lang].bye)};
+$("#authClose").onclick=closeAuth;
+$("#forgot").onclick=e=>{e.preventDefault();toast(T[lang].forgot_msg)};
+addEventListener("hashchange",route);
+setLang("ar");
+loadProducts();
+setInterval(loadProducts, 10000);
+route();
+</script>
+</body>
+</html>

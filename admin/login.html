@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Safran - Admin Login</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#10251c;font-family:Arial,sans-serif;color:#fff;padding:20px}
+.login{width:100%;max-width:400px;background:#19372a;padding:35px;border-radius:18px;border:1px solid #b99a55;box-shadow:0 15px 45px #0005}
+.logo{text-align:center;color:#d5b66d;font-size:32px;font-weight:bold;margin-bottom:8px}
+.subtitle{text-align:center;color:#c7c7c7;margin-bottom:30px}
+label{display:block;margin-bottom:9px}
+input{width:100%;padding:13px;margin-bottom:20px;border:1px solid #55705e;border-radius:8px;background:#10251c;color:white;font-size:16px;outline:none}
+input:focus{border-color:#d5b66d}
+button{width:100%;padding:14px;border:0;border-radius:8px;background:#c5a45c;color:#10251c;font-size:16px;font-weight:bold;cursor:pointer}
+button:hover{background:#e0c47e}
+#message{margin-top:18px;text-align:center;color:#ff9999}
+</style>
+</head>
+<body>
+<div class="login">
+<div class="logo">LE SAFRAN</div>
+<div class="subtitle">Administration Dashboard</div>
+<form id="loginForm">
+<label for="username">اسم المستخدم</label>
+<input id="username" name="username" required autocomplete="username">
+<label for="password">كلمة المرور</label>
+<input id="password" name="password" type="password" required autocomplete="current-password">
+<button type="submit">تسجيل الدخول</button>
+</form>
+<div id="message"></div>
+</div>
+<script>
+document.getElementById("loginForm").addEventListener("submit",async function(e){
+e.preventDefault();
+const message=document.getElementById("message");
+message.textContent="جاري التحقق...";
+try{
+const response=await fetch("/api/admin/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+username:document.getElementById("username").value,
+password:document.getElementById("password").value
+})
+});
+const data=await response.json();
+if(response.ok){
+window.location.href="/admin/dashboard.html";
+}else{
+message.textContent=data.message||"بيانات الدخول غير صحيحة";
+}
+}catch(error){
+message.textContent="تعذر الاتصال بالسيرفر";
+}
+});
+</script>
+</body>
+</html>
